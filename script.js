@@ -28,6 +28,7 @@ let splitEquation = null;
 let operatorIndex = []
 let firstNum = [0];
 let secondNum = [];
+let answerLength = 0;
 let isFirstCalculation = true;
 function calculate() {
   splitEquation = Array.from(result.textContent)
@@ -65,6 +66,7 @@ function calculate() {
           } else {
             isSolutionNegative = false;
           }
+          answerLength = final.toString().length
           //console.log(`${firstNum.join('')} ${splitEquation[operatorIndex[0]]} ${secondNum.join('')} = ${final}`)
           if (final%1 === 0) {
           } else if (typeof final == 'number') {
@@ -164,7 +166,9 @@ clearBtn.addEventListener('click', ()=>{
 })
 
 backBtn.addEventListener('click', ()=>{
+  if (result.textContent.length > answerLength) {
   let resultText = Array.from(result.textContent);
   resultText.pop();
   result.textContent = resultText.join('');
+  }
 })
