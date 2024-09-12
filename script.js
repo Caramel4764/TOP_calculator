@@ -9,8 +9,6 @@ const normalBtnObject = normalBtn.map((btn)=>{
     isClicked: false,
   }
 })
-//console.table(normalBtnObject)
-//console.table(splitEquation)
 
 let hasCalculated = false;
 let total = 0;
@@ -30,7 +28,6 @@ function calculate() {
   if (operatorIndex.length > 0) {
     splitEquation.forEach((char, index)=>{
       if (operatorIndex.includes(index)) {
-        //if (secondNum.length == 0) {
         if (isFirstCalculation == true) {
           isFirstCalculation = false;
           for (let i = operatorIndex[0]+1; i<splitEquation.length ;i++) {
@@ -38,9 +35,23 @@ function calculate() {
           }
         }
         if (secondNum.length > 0) {
-          console.log(`${firstNum.join('')} + ${secondNum.join('')} = ${parseInt(firstNum.join(''))+parseInt(secondNum.join(''))}`)
-          result.textContent = parseInt(firstNum.join(''))+parseInt(secondNum.join(''));
-          firstNum = Array.from((parseInt(firstNum.join(''))+parseInt(secondNum.join(''))).toString());
+          let final;
+          if (splitEquation[operatorIndex[0]] == '+') {
+            final = parseInt(firstNum.join(''))+parseInt(secondNum.join(''))
+          } else if (splitEquation[operatorIndex[0]] == '-') {
+            final = parseInt(firstNum.join(''))-parseInt(secondNum.join(''))
+          } else if (splitEquation[operatorIndex[0]] == '*') {
+            console.log('multiply')
+            final = parseInt(firstNum.join(''))*parseInt(secondNum.join(''))
+          } else if (splitEquation[operatorIndex[0]] == '/') {
+            final = parseInt(firstNum.join(''))/parseInt(secondNum.join(''))
+          }
+          //console.log(`${firstNum.join('')} ${splitEquation[operatorIndex[0]]} ${secondNum.join('')} = ${final}`)
+          if (final%1 === 0) {
+            final = parseInt(final.toFixed(2))
+          }
+          result.textContent = final;
+          firstNum = Array.from((final).toString());
           secondNum = [];
           operatorIndex = [];
         }
@@ -87,12 +98,10 @@ normalBtnObject.forEach((btn)=>{
 })
 
 equalBtn[0].addEventListener('click', function() {
-  //if (splitEquation==null || parseInt(splitEquation.at(-1))>=0||parseInt(splitEquation.at(-1))<0) {
-    let ogColor = equalBtn[0].style.backgroundColor;
-    equalBtn[0].style.backgroundColor="#0c2f44";
-    setTimeout(()=>{
-      equalBtn[0].style.backgroundColor=ogColor;
-    }, 100)
-    calculate();
-  //}
+  let ogColor = equalBtn[0].style.backgroundColor;
+  equalBtn[0].style.backgroundColor="#0c2f44";
+  setTimeout(()=>{
+    equalBtn[0].style.backgroundColor=ogColor;
+  }, 100)
+  calculate();
 })
