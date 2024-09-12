@@ -11,10 +11,7 @@ const allBtnObject = btns.map((btn)=>{
     isClicked: false,
   }
 })
-/*allBtnObject.push({
-  element: equalBtn[0],
-  isClicked:false,
-})*/
+let isDecimal = false;
 const normalBtnObject = normalBtn.map((btn)=>{
   return {
     element: btn,
@@ -85,17 +82,23 @@ function calculate() {
 normalBtnObject.forEach((btn)=>{
   btnObject = btn;
   btn = btn.element;
-  btn.addEventListener('click', ()=>{
-    if (btn.classList.contains('operator')) {
-      calculate();
-    }
-    if (hasCalculated) {
-      hasCalculated = false;
-      result.textContent = '';
-    }
-    result.textContent+=btn.innerHTML;
-    splitEquation = Array.from(result.textContent)
-  });
+    btn.addEventListener('click', ()=>{
+      if (btn.classList.contains('operator')) {
+        calculate();
+        isDecimal = false;
+      }
+      if (hasCalculated) {
+        hasCalculated = false;
+        result.textContent = '';
+      }
+      if (isDecimal === false || btn.innerHTML!='.') {
+        if (btn.innerHTML==='.') {
+          isDecimal = true;
+        }
+        result.textContent+=btn.innerHTML;
+        splitEquation = Array.from(result.textContent)
+      }
+    });
 })
 
 allBtnObject.forEach((btn)=>{
