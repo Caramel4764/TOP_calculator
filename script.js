@@ -20,6 +20,7 @@ const normalBtnObject = normalBtn.map((btn)=>{
 })
 
 let hasCalculated = false;
+let isSolutionNegative = false;
 let canOperatorBePressed = false;
 let total = 0;
 let hasTotalResetted = false;
@@ -59,7 +60,12 @@ function calculate() {
               final = parseFloat(firstNum.join(''))/parseFloat(secondNum.join(''))
             }
           }
-          //console.log(`${firstNum.join('')} ${splitEquation[operatorIndex[0]]} ${secondNum.join('')} = ${final}`)
+          if (final < 0 && final!=undefined) {
+            isSolutionNegative = true;
+          } else {
+            isSolutionNegative = false;
+          }
+          console.log(`${firstNum.join('')} ${splitEquation[operatorIndex[0]]} ${secondNum.join('')} = ${final}`)
           if (final%1 === 0) {
           } else if (typeof final == 'number') {
             final = Math.round(final*100)/100;
@@ -74,8 +80,12 @@ function calculate() {
           firstNum.push(char);
         } else {
           if (secondNum.length == 0) {
+            if (isSolutionNegative) {
+              operatorIndex.shift();
+            }
             for (let i = operatorIndex[0]+1; i<splitEquation.length ;i++) {
               secondNum.push(splitEquation[i])
+              console.table(operatorIndex)
             }
           }
         }
