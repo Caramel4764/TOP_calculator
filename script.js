@@ -52,11 +52,16 @@ function calculate() {
           } else if (splitEquation[operatorIndex[0]] == '*') {
             final = parseFloat(firstNum.join(''))*parseFloat(secondNum.join(''))
           } else if (splitEquation[operatorIndex[0]] == '/') {
-            final = parseFloat(firstNum.join(''))/parseFloat(secondNum.join(''))
+            if (secondNum.join('')==='0') {
+              final = 'Fatal Error (×_×)';
+              console.log(final)
+            } else {
+              final = parseFloat(firstNum.join(''))/parseFloat(secondNum.join(''))
+            }
           }
           //console.log(`${firstNum.join('')} ${splitEquation[operatorIndex[0]]} ${secondNum.join('')} = ${final}`)
           if (final%1 === 0) {
-          } else {
+          } else if (typeof final == 'number') {
             final = Math.round(final*100)/100;
           }
           result.textContent = final;
