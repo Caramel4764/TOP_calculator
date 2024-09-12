@@ -1,3 +1,8 @@
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 #calculator {
   background-color: #fed9b7;
   width:400px;
@@ -10,11 +15,16 @@
 #screen {
   background-color: #fdfcdc;
   width:90%;
+  overflow: scroll;
   height: 20%;
   margin: 20px;
   display:flex;
   border-radius: 10px;
   align-items: center;
+  flex-wrap: nowrap;
+  overflow-y: hidden;
+}
+#screen p {
 }
 #key-div {
   background-color: #f07167;

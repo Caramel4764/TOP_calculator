@@ -9,69 +9,65 @@ const normalBtnObject = normalBtn.map((btn)=>{
     isClicked: false,
   }
 })
-console.table(normalBtnObject)
-let hasCalculated = false;
-function calculate() {
-  let total = 0;
-  let splitEquation = Array.from(result.textContent)
-  let equationIndexs = [];
-  let numberList = []
-  let currNum = [];
+//console.table(normalBtnObject)
+//console.table(splitEquation)
 
-  splitEquation.forEach((btn, index)=>{
-    let isOperator = false;
-    operatorList.forEach((operator)=>{
-      if (operator == btn) {
-        isOperator = true;
-        numberList.push(parseInt(currNum.join('')))
-        equationIndexs.push(index);
-        currNum = [];
+let hasCalculated = false;
+let total = 0;
+let hasTotalResetted = false;
+let splitEquation = null;
+let operatorIndex = []
+let firstNum = [0];
+let secondNum = [];
+let isFirstCalculation = true;
+function calculate() {
+  splitEquation = Array.from(result.textContent)
+  splitEquation.forEach((char, index)=>{
+    if (operatorList.includes(char)) {
+      operatorIndex.push(index);
+    }
+  })
+  if (operatorIndex.length > 0) {
+    splitEquation.forEach((char, index)=>{
+      if (operatorIndex.includes(index)) {
+        //if (secondNum.length == 0) {
+        if (isFirstCalculation == true) {
+          isFirstCalculation = false;
+          for (let i = operatorIndex[0]+1; i<splitEquation.length ;i++) {
+            secondNum.push(splitEquation[i])
+          }
+        }
+        if (secondNum.length > 0) {
+          console.log(`${firstNum.join('')} + ${secondNum.join('')} = ${parseInt(firstNum.join(''))+parseInt(secondNum.join(''))}`)
+          result.textContent = parseInt(firstNum.join(''))+parseInt(secondNum.join(''));
+          firstNum = Array.from((parseInt(firstNum.join(''))+parseInt(secondNum.join(''))).toString());
+          secondNum = [];
+          operatorIndex = [];
+        }
+      } else {
+        if (isFirstCalculation) {
+          firstNum.push(char);
+        } else {
+          if (secondNum.length == 0) {
+            for (let i = operatorIndex[0]+1; i<splitEquation.length ;i++) {
+              secondNum.push(splitEquation[i])
+            }
+          }
+        }
       }
     })
-    if (!isOperator) {
-      currNum.push(btn);
-    }
-  })
-  currNum = [];
-  for (let i = equationIndexs.at(-1)+1; i<=splitEquation.length-1; i++) {
-    currNum.push(splitEquation[i]);
-    if (i == splitEquation.length-1) {
-      numberList.push(parseInt(currNum.join('')))
-      currNum = [];
-      console.table(numberList)
-    }
   }
-
-  equationIndexs.forEach((operatorIndex, index)=>{
-    if (index==0) {
-      total = numberList[0];
-    }
-    switch(splitEquation[operatorIndex]) {
-      case '+':
-        total = total+numberList[index+1];
-        break;
-      case '-':
-        total = total-numberList[index+1];
-        break;
-      case '*':
-        total = total*numberList[index+1];
-        break;
-      case '/':
-        total = total/numberList[index+1];
-        break;
-    }
-  })
-  equationIndexs = [];
-  hasCalculated = true;
-  result.textContent = total;
 }
 
 normalBtnObject.forEach((btn)=>{
   btnObject = btn;
   btn = btn.element;
   btn.addEventListener('click', ()=>{
+    if (btn.classList.contains('operator')) {
+      calculate();
+    }
     if (btnObject.isClicked!==true) {
-    ogColor = btn.style.backgroundColor;
+      ogColor = btn.style.backgroundColor;
     }
     if (parseInt(btn.innerHTML)>=0 || parseInt(btn.innerHTML)<0) {
       btn.style.backgroundColor="#adc0e5";
@@ -81,20 +77,22 @@ normalBtnObject.forEach((btn)=>{
     setTimeout(()=>{
       btn.style.backgroundColor=ogColor;
     }, 100)
-
     if (hasCalculated) {
       hasCalculated = false;
       result.textContent = '';
     }
     result.textContent+=btn.innerHTML;
+    splitEquation = Array.from(result.textContent)
   });
 })
 
 equalBtn[0].addEventListener('click', function() {
-  let ogColor = equalBtn[0].style.backgroundColor;
+  //if (splitEquation==null || parseInt(splitEquation.at(-1))>=0||parseInt(splitEquation.at(-1))<0) {
+    let ogColor = equalBtn[0].style.backgroundColor;
     equalBtn[0].style.backgroundColor="#0c2f44";
     setTimeout(()=>{
       equalBtn[0].style.backgroundColor=ogColor;
     }, 100)
-  calculate()
+    calculate();
+  //}
 })
