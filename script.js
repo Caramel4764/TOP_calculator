@@ -3,76 +3,58 @@ const btns = Array.from(document.querySelectorAll('.btn'))
 const normalBtn = btns.filter((btn)=>btn.innerHTML!='=')
 const equalBtn = btns.filter((btn)=>btn.innerHTML=='=')
 const operatorList = ['+', '-', "*", "/"]
+let hasCalculated = false;
 function calculate() {
   let total = 0;
   let splitEquation = Array.from(result.textContent)
   let equationIndexs = [];
-  let firstNum = [];
-  let secondNum = [];
+  let numberList = []
+  let currNum = [];
+
   splitEquation.forEach((btn, index)=>{
+    let isOperator = false;
     operatorList.forEach((operator)=>{
       if (operator == btn) {
+        isOperator = true;
+        numberList.push(parseInt(currNum.join('')))
         equationIndexs.push(index);
+        currNum = [];
       }
     })
+    if (!isOperator) {
+      currNum.push(btn);
+    }
   })
-  splitEquation.forEach((char, splitIndex)=>{
-    equationIndexs.forEach((equationIndex, index)=>{
-      if (splitIndex == equationIndex) {
-        console.log(Array.isArray(firstNum))
-        if (Array.isArray(firstNum)) {
-          firstNum = firstNum.join('');
-        }
+  currNum = [];
+  for (let i = equationIndexs.at(-1)+1; i<=splitEquation.length-1; i++) {
+    currNum.push(splitEquation[i]);
+    if (i == splitEquation.length-1) {
+      numberList.push(parseInt(currNum.join('')))
+      currNum = [];
+      console.table(numberList)
+    }
+  }
 
-
-        if (splitIndex == equationIndexs.at(-1)) {
-          console.log(index)
-          for (let i = splitIndex+1; i < splitEquation.length; i++) {
-            secondNum.push(splitEquation[i]);
-          }
-          secondNum = secondNum.join('')
-          if (!isNaN(parseInt(secondNum))) {
-            total = parseInt(secondNum)+parseInt(firstNum);
-          }
-          /*console.log(`second: ${secondNum}`)
-          console.log(`first: ${firstNum}`)*/
-          firstNum = [];
-          secondNum = [];
-
-          firstNum = total;
-
-          console.log(`%c ${splitIndex}`, 'color:yellow')
-        }
-        //console.log(firstNum)
-      } else if (splitIndex < equationIndex&&total!=0) {
-        firstNum.push(char);
-        console.log(`%c ${splitIndex}`, 'color:red')
-      } else {
-        for (let i = splitIndex+2; i < splitEquation.length; i++) {
-          secondNum.push(splitEquation[i]);
-        }
-        secondNum = secondNum.join('')
-        console.log(parseInt(secondNum)==NaN)
-        console.log(parseInt(secondNum))
-        if (!isNaN(parseInt(secondNum))) {
-          firstNum = firstNum.join('')
-          if (firstNum == '') {
-            firstNum = 0;
-          }
-          total = parseInt(secondNum)+parseInt(firstNum);
-        }
-        //firstNum = total;
-        secondNum = [];
+  equationIndexs.forEach((operatorIndex, index)=>{
+    if (index==equationIndexs.length-1) {
+      switch(splitEquation[operatorIndex]) {
+        case '+':
+          total = numberList[index]+numberList[index+1];
       }
-    })
+    }
   })
   equationIndexs = [];
-  console.log(`%c ${total}`, 'color:cyan')
-  //result.textContent = total;
+  hasCalculated = true;
+  //console.log(`%c ${total}`, 'color:cyan')
+  result.textContent = total;
 }
 
 normalBtn.forEach((btn)=>{
   btn.addEventListener('click', ()=>{
+    if (hasCalculated) {
+      hasCalculated = false;
+      result.textContent = '';
+    }
     result.textContent+=btn.innerHTML;
   });
 })
