@@ -1,8 +1,15 @@
 const result = document.querySelector("#result");
-const btns = Array.from(document.querySelectorAll('.btn'))
-const normalBtn = btns.filter((btn)=>btn.innerHTML!='=')
-const equalBtn = btns.filter((btn)=>btn.innerHTML=='=')
+const btns = Array.from(document.querySelectorAll('.btn'));
+const equalBtn = btns.filter((btn)=>btn.innerHTML=='=');
 const operatorList = ['+', '-', "*", "/"]
+const normalBtn = btns.filter((btn)=>btn.innerHTML!='=');
+const normalBtnObject = normalBtn.map((btn)=>{
+  return {
+    element: btn,
+    isClicked: false,
+  }
+})
+console.table(normalBtnObject)
 let hasCalculated = false;
 function calculate() {
   let total = 0;
@@ -59,8 +66,22 @@ function calculate() {
   result.textContent = total;
 }
 
-normalBtn.forEach((btn)=>{
+normalBtnObject.forEach((btn)=>{
+  btnObject = btn;
+  btn = btn.element;
   btn.addEventListener('click', ()=>{
+    if (btnObject.isClicked!==true) {
+    ogColor = btn.style.backgroundColor;
+    }
+    if (parseInt(btn.innerHTML)>=0 || parseInt(btn.innerHTML)<0) {
+      btn.style.backgroundColor="#adc0e5";
+    } else {
+      btn.style.backgroundColor="#5c87b5";
+    }
+    setTimeout(()=>{
+      btn.style.backgroundColor=ogColor;
+    }, 100)
+
     if (hasCalculated) {
       hasCalculated = false;
       result.textContent = '';
@@ -69,4 +90,11 @@ normalBtn.forEach((btn)=>{
   });
 })
 
-equalBtn[0].addEventListener('click', calculate)
+equalBtn[0].addEventListener('click', function() {
+  let ogColor = equalBtn[0].style.backgroundColor;
+    equalBtn[0].style.backgroundColor="#0c2f44";
+    setTimeout(()=>{
+      equalBtn[0].style.backgroundColor=ogColor;
+    }, 100)
+  calculate()
+})
