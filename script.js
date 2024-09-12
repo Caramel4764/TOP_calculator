@@ -5,6 +5,16 @@ const operatorList = ['+', '-', "*", "/"]
 const backBtn = document.querySelector('#back')
 const clearBtn = document.querySelector('#clear')
 const normalBtn = btns.filter((btn)=>btn.innerHTML!='='&&btn.innerHTML!='Back'&&btn.innerHTML!='Clear');
+const allBtnObject = btns.map((btn)=>{
+  return {
+    element: btn,
+    isClicked: false,
+  }
+})
+/*allBtnObject.push({
+  element: equalBtn[0],
+  isClicked:false,
+})*/
 const normalBtnObject = normalBtn.map((btn)=>{
   return {
     element: btn,
@@ -79,17 +89,6 @@ normalBtnObject.forEach((btn)=>{
     if (btn.classList.contains('operator')) {
       calculate();
     }
-    if (btnObject.isClicked!==true) {
-      ogColor = btn.style.backgroundColor;
-    }
-    if (parseInt(btn.innerHTML)>=0 || parseInt(btn.innerHTML)<0) {
-      btn.style.backgroundColor="#adc0e5";
-    } else {
-      btn.style.backgroundColor="#5c87b5";
-    }
-    setTimeout(()=>{
-      btn.style.backgroundColor=ogColor;
-    }, 100)
     if (hasCalculated) {
       hasCalculated = false;
       result.textContent = '';
@@ -99,12 +98,29 @@ normalBtnObject.forEach((btn)=>{
   });
 })
 
+allBtnObject.forEach((btn)=>{
+  btnObject = btn;
+  btn = btn.element;
+  btn.addEventListener('click', ()=>{
+    if (btnObject.isClicked!==true) {
+      ogColor = btn.style.backgroundColor;
+      btnObject.isClicked = true;
+    }
+    if (parseInt(btn.innerHTML)>=0 || parseInt(btn.innerHTML)<0) {
+      btn.style.backgroundColor="#adc0e5";
+    } else if (btn.innerHTML=='.' || operatorList.includes(btn.innerHTML)) {
+      btn.style.backgroundColor="#5c87b5";
+    } else {
+      btn.style.backgroundColor="#0e2e42";
+    }
+    setTimeout(()=>{
+      btn.style.backgroundColor=ogColor;
+      btnObject.isClicked = false;
+    }, 100)
+  })
+})
+
 equalBtn[0].addEventListener('click', function() {
-  let ogColor = equalBtn[0].style.backgroundColor;
-  equalBtn[0].style.backgroundColor="#0c2f44";
-  setTimeout(()=>{
-    equalBtn[0].style.backgroundColor=ogColor;
-  }, 100)
   calculate();
 })
 
@@ -118,4 +134,10 @@ clearBtn.addEventListener('click', ()=>{
   secondNum = [];
   isFirstCalculation = true;
   result.innerHTML='';
+})
+
+backBtn.addEventListener('click', ()=>{
+  let resultText = Array.from(result.textContent);
+  resultText.pop();
+  result.textContent = resultText.join('');
 })
