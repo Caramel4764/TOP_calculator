@@ -36,16 +36,16 @@ function calculate() {
   }
 
   equationIndexs.forEach((operatorIndex, index)=>{
-    if (index==equationIndexs.length-1) {
-      switch(splitEquation[operatorIndex]) {
-        case '+':
-          total = numberList[index]+numberList[index+1];
-      }
+    if (index==0) {
+      total = numberList[0];
+    }
+    switch(splitEquation[operatorIndex]) {
+      case '+':
+        total = total+numberList[index+1];
     }
   })
   equationIndexs = [];
   hasCalculated = true;
-  //console.log(`%c ${total}`, 'color:cyan')
   result.textContent = total;
 }
 
