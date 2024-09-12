@@ -37,18 +37,18 @@ function calculate() {
         if (secondNum.length > 0) {
           let final;
           if (splitEquation[operatorIndex[0]] == '+') {
-            final = parseInt(firstNum.join(''))+parseInt(secondNum.join(''))
+            final = parseFloat(firstNum.join(''))+parseFloat(secondNum.join(''))
           } else if (splitEquation[operatorIndex[0]] == '-') {
-            final = parseInt(firstNum.join(''))-parseInt(secondNum.join(''))
+            final = parseFloat(firstNum.join(''))-parseFloat(secondNum.join(''))
           } else if (splitEquation[operatorIndex[0]] == '*') {
-            console.log('multiply')
-            final = parseInt(firstNum.join(''))*parseInt(secondNum.join(''))
+            final = parseFloat(firstNum.join(''))*parseFloat(secondNum.join(''))
           } else if (splitEquation[operatorIndex[0]] == '/') {
-            final = parseInt(firstNum.join(''))/parseInt(secondNum.join(''))
+            final = parseFloat(firstNum.join(''))/parseFloat(secondNum.join(''))
           }
           //console.log(`${firstNum.join('')} ${splitEquation[operatorIndex[0]]} ${secondNum.join('')} = ${final}`)
           if (final%1 === 0) {
-            final = parseInt(final.toFixed(2))
+          } else {
+            final = Math.round(final*100)/100;
           }
           result.textContent = final;
           firstNum = Array.from((final).toString());
