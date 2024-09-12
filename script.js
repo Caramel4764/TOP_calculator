@@ -42,6 +42,16 @@ function calculate() {
     switch(splitEquation[operatorIndex]) {
       case '+':
         total = total+numberList[index+1];
+        break;
+      case '-':
+        total = total-numberList[index+1];
+        break;
+      case '*':
+        total = total*numberList[index+1];
+        break;
+      case '/':
+        total = total/numberList[index+1];
+        break;
     }
   })
   equationIndexs = [];
