@@ -65,7 +65,7 @@ function calculate() {
           } else {
             isSolutionNegative = false;
           }
-          console.log(`${firstNum.join('')} ${splitEquation[operatorIndex[0]]} ${secondNum.join('')} = ${final}`)
+          //console.log(`${firstNum.join('')} ${splitEquation[operatorIndex[0]]} ${secondNum.join('')} = ${final}`)
           if (final%1 === 0) {
           } else if (typeof final == 'number') {
             final = Math.round(final*100)/100;
@@ -85,7 +85,6 @@ function calculate() {
             }
             for (let i = operatorIndex[0]+1; i<splitEquation.length ;i++) {
               secondNum.push(splitEquation[i])
-              console.table(operatorIndex)
             }
           }
         }
