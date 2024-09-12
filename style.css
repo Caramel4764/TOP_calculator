@@ -51,7 +51,7 @@
   background-color: #1b4965;
   color:white;
 }
-#enter:hover {
+#enter:hover, .dbl-btn:hover {
   background-color: #185175;
 }
 .operator, #decimal{

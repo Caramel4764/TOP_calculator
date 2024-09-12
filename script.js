@@ -2,7 +2,9 @@ const result = document.querySelector("#result");
 const btns = Array.from(document.querySelectorAll('.btn'));
 const equalBtn = btns.filter((btn)=>btn.innerHTML=='=');
 const operatorList = ['+', '-', "*", "/"]
-const normalBtn = btns.filter((btn)=>btn.innerHTML!='=');
+const backBtn = document.querySelector('#back')
+const clearBtn = document.querySelector('#clear')
+const normalBtn = btns.filter((btn)=>btn.innerHTML!='='&&btn.innerHTML!='Back'&&btn.innerHTML!='Clear');
 const normalBtnObject = normalBtn.map((btn)=>{
   return {
     element: btn,
@@ -104,4 +106,16 @@ equalBtn[0].addEventListener('click', function() {
     equalBtn[0].style.backgroundColor=ogColor;
   }, 100)
   calculate();
+})
+
+clearBtn.addEventListener('click', ()=>{
+  hasCalculated = false;
+  total = 0;
+  hasTotalResetted = false;
+  splitEquation = null;
+  operatorIndex = []
+  firstNum = [0];
+  secondNum = [];
+  isFirstCalculation = true;
+  result.innerHTML='';
 })
