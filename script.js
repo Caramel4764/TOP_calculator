@@ -20,6 +20,7 @@ const normalBtnObject = normalBtn.map((btn)=>{
 })
 
 let hasCalculated = false;
+let canOperatorBePressed = false;
 let total = 0;
 let hasTotalResetted = false;
 let splitEquation = null;
@@ -54,7 +55,6 @@ function calculate() {
           } else if (splitEquation[operatorIndex[0]] == '/') {
             if (secondNum.join('')==='0') {
               final = 'Fatal Error (×_×)';
-              console.log(final)
             } else {
               final = parseFloat(firstNum.join(''))/parseFloat(secondNum.join(''))
             }
@@ -84,13 +84,45 @@ function calculate() {
   }
 }
 
+allBtnObject.forEach((btn)=>{
+  btnObject = btn;
+  btn = btn.element;
+  btn.addEventListener('click', ()=>{
+    if ((btn.innerHTML != '.' || isDecimal === false)&&((!operatorList.includes(btn.innerHTML)) || canOperatorBePressed === true)) {
+      if (btnObject.isClicked!==true) {
+        ogColor = btn.style.backgroundColor;
+        btnObject.isClicked = true;
+      }
+      if (parseInt(btn.innerHTML)>=0 || parseInt(btn.innerHTML)<0) {
+        btn.style.backgroundColor="#adc0e5";
+      } else if (btn.innerHTML=='.' || operatorList.includes(btn.innerHTML)) {
+        btn.style.backgroundColor="#5c87b5";
+      } else {
+        btn.style.backgroundColor="#0e2e42";
+      }
+      setTimeout(()=>{
+        btn.style.backgroundColor=ogColor;
+        btnObject.isClicked = false;
+      }, 100)
+    }
+  })
+})
+
 normalBtnObject.forEach((btn)=>{
   btnObject = btn;
   btn = btn.element;
     btn.addEventListener('click', ()=>{
+      let btnText = btn.innerHTML;
       if (btn.classList.contains('operator')) {
-        calculate();
-        isDecimal = false;
+        if (canOperatorBePressed) {
+          calculate();
+          canOperatorBePressed = false;
+          isDecimal = false;
+        } else {
+          btnText="";
+        }
+      } else {
+        canOperatorBePressed = true;
       }
       if (hasCalculated) {
         hasCalculated = false;
@@ -100,32 +132,10 @@ normalBtnObject.forEach((btn)=>{
         if (btn.innerHTML==='.') {
           isDecimal = true;
         }
-        result.textContent+=btn.innerHTML;
+        result.textContent+=btnText;
         splitEquation = Array.from(result.textContent)
       }
     });
-})
-
-allBtnObject.forEach((btn)=>{
-  btnObject = btn;
-  btn = btn.element;
-  btn.addEventListener('click', ()=>{
-    if (btnObject.isClicked!==true) {
-      ogColor = btn.style.backgroundColor;
-      btnObject.isClicked = true;
-    }
-    if (parseInt(btn.innerHTML)>=0 || parseInt(btn.innerHTML)<0) {
-      btn.style.backgroundColor="#adc0e5";
-    } else if (btn.innerHTML=='.' || operatorList.includes(btn.innerHTML)) {
-      btn.style.backgroundColor="#5c87b5";
-    } else {
-      btn.style.backgroundColor="#0e2e42";
-    }
-    setTimeout(()=>{
-      btn.style.backgroundColor=ogColor;
-      btnObject.isClicked = false;
-    }, 100)
-  })
 })
 
 equalBtn[0].addEventListener('click', function() {
